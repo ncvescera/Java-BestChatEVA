@@ -34,7 +34,7 @@ public class Handler extends Thread{
             
             //creo il buffer di scrittura
             writer = new PrintWriter(
-                    this.socket.getOutputStream());
+                    this.socket.getOutputStream(), true);
             
             writer.println("START CHAT ...");
             

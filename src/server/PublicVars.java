@@ -15,5 +15,5 @@ import java.util.ArrayList;
 public class PublicVars {
     
     public static ArrayList<PrintWriter> writers = new ArrayList();
-    public static int ServerPort = 4; //Unassigned TCP port
+    public static int ServerPort = 2000; //Unassigned TCP port
 }
