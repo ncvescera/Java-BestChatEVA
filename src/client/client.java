@@ -5,6 +5,12 @@
  */
 package client;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
 /**
  *
  * @author ncvescera
@@ -14,8 +20,27 @@ public class client extends javax.swing.JFrame {
     /**
      * Creates new form client
      */
+    Socket socket = null;
+    BufferedReader in = null;
+    PrintWriter out = null;
+    
     public client() {
+        try{
+        socket = new Socket("localhost",2000);
+        
+        in = new BufferedReader(
+                new InputStreamReader(
+                        socket.getInputStream()));
+        
+        out = new PrintWriter(
+                socket.getOutputStream(),true);
+        } catch(IOException e){
+            System.err.println(e.getCause());
+        }
+        
         initComponents();
+        
+        new ThreadReader(in,jTextArea2).start();
     }
 
     /**
@@ -38,6 +63,11 @@ public class client extends javax.swing.JFrame {
         jTextField1.setToolTipText("Scrivi del testo");
 
         jButton1.setText("Invia");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -85,6 +115,14 @@ public class client extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if(out != null){
+            //jTextArea2.setText("ME: "+jTextField1.getText());
+            out.println(jTextField1.getText());
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
