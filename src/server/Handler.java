@@ -36,16 +36,21 @@ public class Handler extends Thread{
             writer = new PrintWriter(
                     this.socket.getOutputStream(), true);
             
-            writer.println("START CHAT ...");
-            
             PublicVars.writers.add(writer);
+            
+            writer.println("START CHAT ...");
+            writer.println("Inserisci un Nickname:");
+            
+            String name = reader.readLine();
+            
+            writer.println("Ora sei "+name);
             
             while(true){
                 String input = reader.readLine();
                 
                 if(input != null){
                     for(PrintWriter elem:PublicVars.writers){
-                        elem.println("SERVER: "+input);
+                        elem.println(name+": "+input);
                     }
                 }
             }
@@ -54,9 +59,10 @@ public class Handler extends Thread{
             System.out.println("Da gestire");
         } finally{
             if(writer != null) PublicVars.writers.remove(writer);
-            
+            System.out.println("Client disconnesso!");
             try{
                 socket.close();
+                
             } catch(IOException e){
                 System.err.println("Impossibile chiudere il socket!");
             }

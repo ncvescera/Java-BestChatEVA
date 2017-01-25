@@ -5,6 +5,7 @@
  */
 package client;
 
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -59,8 +60,18 @@ public class client extends javax.swing.JFrame {
         jTextArea2 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jTextField1.setToolTipText("Scrivi del testo");
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField1KeyPressed(evt);
+            }
+        });
 
         jButton1.setText("Invia");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -118,12 +129,35 @@ public class client extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        sendMessage();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        /*try{
+            socket.close();
+            in.close();
+            out.close();
+            
+            
+        } catch(IOException e){
+            System.err.println(e);
+        }*/
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            sendMessage();
+        }
+    }//GEN-LAST:event_jTextField1KeyPressed
+    
+    private void sendMessage(){
         if(out != null){
             //jTextArea2.setText("ME: "+jTextField1.getText());
             out.println(jTextField1.getText());
+            jTextField1.setText("");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
+    }
     /**
      * @param args the command line arguments
      */
