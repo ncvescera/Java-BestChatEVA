@@ -5,17 +5,35 @@
  */
 package server;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+
 /**
  *
  * @author ncvescera
  */
 public class MainServer {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    
+    public static void main(String[] args) throws IOException {
+        ServerSocket listener = new ServerSocket(PublicVars.ServerPort); //il server ascolta la porta
+        System.out.println("Il server è in ascolto sulla porta: "+PublicVars.ServerPort);
+        
+        Socket socket = null;
+        
+        try{
+            while(true){
+                socket = listener.accept();
+                new Handler(socket).start(); //avvio il thread che gesità il singolo user
+            }
+        } catch(IOException e){
+            System.out.println("E' successo qualcosa");
+        } finally{
+            listener.close();
+        }
+        
     }
     
 }
