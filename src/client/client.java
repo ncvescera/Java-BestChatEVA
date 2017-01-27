@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import javax.swing.text.DefaultCaret;
 
 /**
  *
@@ -40,6 +41,9 @@ public class client extends javax.swing.JFrame {
         }
         
         initComponents();
+        
+        DefaultCaret caret = (DefaultCaret) jTextArea2.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         
         new ThreadReader(in,jTextArea2).start();
     }
