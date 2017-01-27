@@ -36,14 +36,20 @@ public class Handler extends Thread{
             writer = new PrintWriter(
                     this.socket.getOutputStream(), true);
             
-            PublicVars.writers.add(writer);
-            
             writer.println("START CHAT ...");
             writer.println("Inserisci un Nickname:");
             
             String name = reader.readLine();
             
+            PublicVars.nicks.add(name);
+            
             writer.println("Ora sei "+name);
+            
+            for(PrintWriter elem:PublicVars.writers){
+                elem.println(name+" si è connesso ...");
+            }
+            
+            PublicVars.writers.add(writer);
             
             while(true){
                 String input = reader.readLine();
