@@ -25,6 +25,7 @@ public class client extends javax.swing.JFrame {
     Socket socket = null;
     BufferedReader in = null;
     PrintWriter out = null;
+    ThreadReader threader;
     
     public client() {
         try{
@@ -45,7 +46,8 @@ public class client extends javax.swing.JFrame {
         DefaultCaret caret = (DefaultCaret) jTextArea2.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         
-        new ThreadReader(in,jTextArea2).start();
+        threader = new ThreadReader(in,jTextArea2);
+        threader.start();
     }
 
     /**
@@ -156,10 +158,16 @@ public class client extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField1KeyPressed
     
+    private boolean firstMessage = true; //flag per indicare il primo messaggio inviato: il nickname
     private void sendMessage(){
         if(out != null){
             //jTextArea2.setText("ME: "+jTextField1.getText());
             String toSendText = jTextField1.getText();
+            
+            if(firstMessage){
+                threader.setNickname(toSendText);
+                firstMessage = false;
+            }
             
             if(!toSendText.equals("")){
                 out.println(jTextField1.getText());
