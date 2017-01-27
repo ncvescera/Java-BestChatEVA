@@ -20,8 +20,11 @@ public class Handler extends Thread{
     private BufferedReader reader;
     private PrintWriter writer;
     
+    private String nome;
+    
     public Handler(Socket socket){
         this.socket = socket;
+        this.nome = "";
     }
     
     @Override
@@ -39,24 +42,25 @@ public class Handler extends Thread{
             writer.println("START CHAT ...");
             writer.println("Inserisci un Nickname:");
             
-            String name = reader.readLine();
+            nome = reader.readLine();
             
-            PublicVars.nicks.add(name);
-            
-            writer.println("Ora sei "+name);
+            PublicVars.nicks.add(nome);
+            System.out.println(nome+"("+socket.getInetAddress()+") si è connesso");
+            writer.println("Ora sei "+nome);
             
             for(PrintWriter elem:PublicVars.writers){
-                elem.println(name+" si è connesso ...");
+                elem.println(nome+" si è connesso ...");
             }
             
             PublicVars.writers.add(writer);
             
-            while(true){
-                String input = reader.readLine();
+            String input = "";
+            while(input != null){
+                input = reader.readLine();
                 
                 if(input != null){
                     for(PrintWriter elem:PublicVars.writers){
-                        elem.println(name+": "+input);
+                        elem.println(nome+": "+input);
                     }
                 }
             }
@@ -64,11 +68,21 @@ public class Handler extends Thread{
         } catch(IOException e){
             System.out.println("Da gestire");
         } finally{
-            if(writer != null) PublicVars.writers.remove(writer);
-            System.out.println("Client disconnesso!");
             try{
+                if(writer != null){
+                    PublicVars.writers.remove(writer);
+                    this.writer.close();
+                }
+                if(this.reader != null){
+                    reader.close();
+                }
+                for(PrintWriter elem:PublicVars.writers){
+                    elem.println(nome+" si è disconnesso");
+                }
+                System.out.println(nome+"("+socket.getInetAddress()+") si è disconnesso!");
+
                 socket.close();
-                
+
             } catch(IOException e){
                 System.err.println("Impossibile chiudere il socket!");
             }

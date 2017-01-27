@@ -38,7 +38,7 @@ public class client extends javax.swing.JFrame {
         out = new PrintWriter(
                 socket.getOutputStream(),true);
         } catch(IOException e){
-            System.err.println(e.getCause());
+            System.err.println(e);
         }
         
         initComponents();
@@ -140,15 +140,17 @@ public class client extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        /*try{
-            socket.close();
-            in.close();
+        try{
+            threader.kill();
+            
+            //in.close();
             out.close();
             
+            socket.close();
             
         } catch(IOException e){
             System.err.println(e);
-        }*/
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed

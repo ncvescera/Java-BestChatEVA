@@ -24,6 +24,7 @@ public class MainServer {
         try{
             while(true){
                 socket = listener.accept();
+                //System.out.println();
                 new Handler(socket).start(); //avvio il thread che gesità il singolo user
             }
         } catch(IOException e){

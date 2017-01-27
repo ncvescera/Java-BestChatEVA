@@ -7,6 +7,8 @@ package client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextArea;
 
 /**
@@ -17,11 +19,13 @@ public class ThreadReader extends Thread{
     private BufferedReader reader;
     private JTextArea text;
     private String nickname;
+    private boolean live;
     
     public ThreadReader(BufferedReader reader, JTextArea text){
         this.reader = reader;
         this.text = text;
         this.nickname = "";
+        this.live = true;
     }
     
     public void setNickname(String nickname){
@@ -44,9 +48,12 @@ public class ThreadReader extends Thread{
                 return str;
     }
     
+    public void kill(){
+        this.live = false;
+    }
     @Override
     public void run(){
-        while(true){
+        while(live){
             try{
                 String in = replaceNick(reader.readLine());
                 
@@ -54,8 +61,14 @@ public class ThreadReader extends Thread{
                     text.setText(text.getText()+"\n"+in+"\n");
                 }
             } catch(IOException e){
-                System.err.println(e.getCause());
+                System.out.println("Exit ...");
             }
+        }
+        
+        try {
+            this.reader.close();
+        } catch (IOException e) {
+            System.out.println(e);
         }
     }
 }
