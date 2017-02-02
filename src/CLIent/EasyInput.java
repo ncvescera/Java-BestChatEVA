@@ -8,7 +8,7 @@ public class EasyInput {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader tastiera = new BufferedReader(input);
 
-        System.out.println(arg);
+        System.out.print(arg);
         try{
                 String letto = tastiera.readLine();
                 return letto;

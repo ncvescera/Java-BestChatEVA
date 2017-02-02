@@ -19,12 +19,9 @@ public class CLIent {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
-    private boolean firstMessage;
     private ThreadReader threader;
     
     public CLIent(String ip, int port){
-        this.firstMessage = true;
-        
         try{
             socket = new Socket(ip,port);
 
@@ -44,10 +41,6 @@ public class CLIent {
     }
     
     public void sendMessage(String message){
-        if(firstMessage){
-            threader.setNickname(message);
-            firstMessage = false;
-        }
         
         if(out != null && !message.equals("")){
             out.println(message);

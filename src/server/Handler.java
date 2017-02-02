@@ -60,7 +60,8 @@ public class Handler extends Thread{
                 
                 if(input != null){
                     for(PrintWriter elem:PublicVars.writers){
-                        elem.println(nome+": "+input);
+                        if(elem != writer)
+                            elem.println(nome+": "+input);
                     }
                 }
             }

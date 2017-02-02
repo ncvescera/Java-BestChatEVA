@@ -14,33 +14,11 @@ import java.io.IOException;
  */
 public class ThreadReader extends Thread{
     private BufferedReader reader;
-    private String nickname;
     private boolean live;
     
     public ThreadReader(BufferedReader reader){
         this.reader = reader;
-        this.nickname = "";
         this.live = true;
-    }
-    
-    public void setNickname(String nickname){
-        this.nickname = nickname;
-    }
-    
-    private String replaceNick(String str){
-        String nick = "";
-        try{
-            nick = str.substring(0,str.indexOf(":"));
-            
-            
-        } catch(StringIndexOutOfBoundsException e){
-            return str;
-        }
-        
-        if(this.nickname.equals(nick))
-                return "IO:"+str.substring(str.indexOf(":")+1);
-            else
-                return str;
     }
     
     public void kill(){
@@ -50,10 +28,9 @@ public class ThreadReader extends Thread{
     public void run(){
         while(live){
             try{
-                String in = replaceNick(reader.readLine());
+                String in = reader.readLine();
                 
                 if(in != null){
-                    //text.setText(text.getText()+"\n"+in+"\n");
                     System.out.println(in);
                 }
             } catch(IOException e){

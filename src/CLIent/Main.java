@@ -17,7 +17,7 @@ public class Main {
      */
     
     public static void main(String[] args) {
-        CLIent client = new CLIent("192.168.1.62",2000);
+        CLIent client = new CLIent("localhost",2000);
         
         while(true){
             client.sendMessage(EasyInput.inputS(""));
