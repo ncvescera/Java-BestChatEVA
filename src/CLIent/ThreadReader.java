@@ -3,13 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package client;
+package CLIent;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JTextArea;
 
 /**
  *
@@ -17,13 +14,11 @@ import javax.swing.JTextArea;
  */
 public class ThreadReader extends Thread{
     private BufferedReader reader;
-    private JTextArea text;
     private String nickname;
     private boolean live;
     
-    public ThreadReader(BufferedReader reader, JTextArea text){
+    public ThreadReader(BufferedReader reader){
         this.reader = reader;
-        this.text = text;
         this.nickname = "";
         this.live = true;
     }
@@ -58,7 +53,8 @@ public class ThreadReader extends Thread{
                 String in = replaceNick(reader.readLine());
                 
                 if(in != null){
-                    text.setText(text.getText()+"\n"+in+"\n");
+                    //text.setText(text.getText()+"\n"+in+"\n");
+                    System.out.println(in);
                 }
             } catch(IOException e){
                 System.out.println("Exit ...");
