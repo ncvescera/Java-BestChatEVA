@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package CLIent;
 
 import java.io.BufferedReader;
@@ -23,11 +18,6 @@ public class ThreadReader extends Thread{
     
     public void kill(){
         this.live = false;
-        /*try{
-            reader.close();
-        } catch(IOException e){
-            System.err.println(e);
-        }*/
     }
     @Override
     public void run(){
