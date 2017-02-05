@@ -41,8 +41,17 @@ public class CLIent {
     }
     
     public void sendMessage(String message){
-        
-        if(out != null && !message.equals("")){
+        if(message.equals("end")){
+            Main.live = false; //fine del ciclo di invio messaggi
+            threader.kill();
+            try{
+                out.close();
+                socket.close();
+            } catch(IOException e){
+                System.err.println(e);
+            }
+        }
+        else if(out != null && !message.equals("")){
             out.println(message);
         }
     }

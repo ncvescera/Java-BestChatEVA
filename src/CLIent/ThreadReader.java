@@ -23,6 +23,11 @@ public class ThreadReader extends Thread{
     
     public void kill(){
         this.live = false;
+        /*try{
+            reader.close();
+        } catch(IOException e){
+            System.err.println(e);
+        }*/
     }
     @Override
     public void run(){
