@@ -1,53 +1,108 @@
 package CLIent;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 /**
- *
- * @author ncvescera
+ * Classe che gestisce gli stream di input e output del client
+ * @author ncvescera e smpiccini
  */
 public class CLIent {
+
     private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
     private ThreadReader threader;
     
-    public CLIent(String ip, int port){
-        try{
-            socket = new Socket(ip,port);
+    /**
+     * Metodo costruttore che instanzia il socket e gli stream di input e output
+     * @param ip indirizzo ip del server
+     * @param port porta sulla quale il server è in ascolto
+     */
+    public CLIent(String ip, int port) {
 
-            in = new BufferedReader(
-                    new InputStreamReader(
-                            socket.getInputStream()));
+        try {
+            socket = new Socket(ip, port);
 
-            out = new PrintWriter(
-                    socket.getOutputStream(),true);
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
 
-        } catch(IOException e){
+        } catch (IOException e) {
             System.err.println(e);
+            System.exit(1);
         }
-        
         this.threader = new ThreadReader(in);
+
         this.threader.start();
     }
     
-    public void sendMessage(String message){
-        if(message.equals("end")){
-            Main.live = false; //fine del ciclo di invio messaggi
-            threader.kill();
-            try{
-                out.close();
-                socket.close();
-            } catch(IOException e){
-                System.err.println(e);
+    /**
+     * Legge un file e salva il contenuto in un array di byte
+     * @param f File in input
+     * @return Array di byte che sarà poi inviato al server
+     */
+    public byte[] convertFile(File f) {
+        BufferedInputStream bis = null;
+        byte[] b = null;
+        try {
+            b = new byte[(int) f.length()];
+            bis = new BufferedInputStream(new FileInputStream(f));
+            bis.read(b, 0, b.length);
+        } catch (IOException ex) {
+            System.err.println(ex);
+            System.exit(1);
+        }
+        return b;
+    }
+    
+    /**
+     * Converte il messaggio in un array di byte
+     * @param message Messaggio del client
+     * @return Array di byte che sarà poi inviato al server
+     */
+    public byte[] convertMessage(String message) {
+        byte[] b = null;
+        if (!message.equals("")) {
+            b = message.getBytes();
+        }
+        return b;
+    }
+
+    /**
+     * Invia l'array di byte al server
+     * @param b Array di byte precedentemente creato
+     */
+    public void send(byte[] b) {
+
+        if (out != null && b != null) {
+            try {
+
+                out.writeObject(b);
+                //out.flush();
+            } catch (IOException ex) {
+                System.err.println(ex);
+                System.exit(1);
             }
         }
-        else if(out != null && !message.equals("")){
-            out.println(message);
-        }
+
     }
+    
+    /**
+     * Chiude la connessione tra client e server
+     */
+    public void close() {
+        try {
+            if (out != null) {
+                out.close();
+            }
+            if (in != null) {
+                in.close();
+            }
+        } catch (IOException ex) {
+            System.err.println(ex);
+            System.exit(1);
+        }
+        this.threader.stop();
+    }
+
 }

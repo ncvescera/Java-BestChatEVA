@@ -1,37 +1,61 @@
 package CLIent;
 
+import java.awt.*;
+import javax.swing.*;
 
 /**
- *
- * @author ncvescera
+ * Classe di avvio del CLIent
+ * @author ncvescera e smpiccini
  */
 public class Main {
 
     /**
      * @param args the command line arguments
      */
-    static boolean live = true;
-    
     public static void main(String[] args) {
         String host;
         int port;
-        
-        if(args.length > 0){
+        String message = "";
+        byte[] b = null;
+
+        JFileChooser chooser;
+        Frame f = new Frame();
+
+        if (args.length > 0) {
             host = args[0];
             port = Integer.parseInt(args[1]);
-        }
-        else{
+        } else {
             host = "localhost";
             port = 2000;
         }
-            
-        CLIent client = new CLIent(host,port);
-        
-        while(live){
-            client.sendMessage(EasyInput.inputS(""));
+
+        CLIent client = new CLIent(host, port);
+        message = EasyInput.inputS("");
+        while (!message.equals(":exit")) {
+
+            message = message.replace(":)", "\u263A");
+            b = client.convertMessage(message);
+
+            if (message.equals(":file")) {
+                chooser = new JFileChooser();
+                f.setVisible(true);
+                int n = chooser.showOpenDialog(f);
+                if (n == JFileChooser.APPROVE_OPTION) {
+                    client.send(b);		//invia comando :file
+
+                    b = client.convertMessage(chooser.getSelectedFile().getName());
+                    client.send(b);		//invia nome file
+
+                    b = client.convertFile(chooser.getSelectedFile());
+                    client.send(b);		//invia file
+                }
+                f.setVisible(false);
+            } else {
+                client.send(b);		//invia messaggio
+            }
+            message = EasyInput.inputS("");
         }
-        //System.out.println("\033[31;1mHello\033[0m, \033[32;1;2mworld!\033[0m");//colora l'output
-        
+        client.close();
     }
-    
+
 }

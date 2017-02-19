@@ -1,9 +1,16 @@
 package CLIent;
 
 import java.io.*;
-import javafx.geometry.Point2D;
-
+/**
+ * Classe che permette di effettuare l'input da tastiera in modo semplice e veloce
+ * @author ncvescera e smpiccini
+ */
 public class EasyInput {
+    /**
+     * Metodo per richiedere l'inserimento di una stringa
+     * @param arg Il messaggio che dovrà essere mostrato a video
+     * @return La stringa che l'utente ha inserito
+     */
     public static String inputS(String arg){
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader tastiera = new BufferedReader(input);
@@ -22,6 +29,11 @@ public class EasyInput {
         
     }
     
+    /**
+     * Metodo per richiedere l'inserimento di un numero intero
+     * @param arg Il messaggio che dovrà essere mostrato a video
+     * @return Il numero che ha inserito l'utente
+     */
     public static int inputI(String arg){
         String input = inputS(arg);
         int re = 0;
@@ -34,6 +46,11 @@ public class EasyInput {
         return re;
     }
     
+    /**
+     * Metodo per richiedere l'inserimento di un numero con la virgola
+     * @param arg Il messaggio che dovrà essere mostrato a video
+     * @return Il numero che ha inserito l'utente
+     */
     public static float inputF(String arg){
         String input = inputS(arg);
         float parse = 0;
@@ -46,6 +63,11 @@ public class EasyInput {
         return parse;
     }
     
+    /**
+     * Metodo per richiedere l'inserimento di un double
+     * @param arg Il messaggio che dovrà essere mostrato a video
+     * @return Il numero che ha inserito l'utente
+     */
     public static double inputD(String arg){
         String input = inputS(arg);
         double parse = 0;
@@ -56,12 +78,5 @@ public class EasyInput {
             System.out.println("Error! Unparsable value.");
         }
         return parse;
-    }
-    
-    public static Point2D inputP2D(String arg){
-        double inputX = inputD(arg+"\nX: ");
-        double inputY = inputD("Y: ");
-        
-        return new Point2D(inputX,inputY);
     }
 }
